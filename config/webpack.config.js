@@ -284,6 +284,7 @@ module.exports = function(webpackEnv) {
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         "react-native-linear-gradient": "dependencies/linearGradient",
         "react-native-firebase": "dependencies/firebase",
+        "react-native-video": "dependencies/video",
         "react-native-google-cast": "dependencies/CastButton",
         "instabug-reactnative": "dependencies/instabug-reactnative",
         "react-native-intercom": "dependencies/react-native-intercom",
