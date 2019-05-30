@@ -54,6 +54,7 @@ const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 const protocol = process.env.HTTPS === "true" ? "https" : "http";
 const appDirectory = path.resolve(__dirname, '../');
+const customModulesDirectory = path.resolve(__dirname, '../dependencies');
 const __DEV__ = process.env.NODE_ENV === 'development'
 
 // This is the production and development configuration.
@@ -269,7 +270,7 @@ module.exports = function(webpackEnv) {
       // We placed these paths second because we want `node_modules` to "win"
       // if there are any conflicts. This matches Node resolution mechanism.
       // https://github.com/facebook/create-react-app/issues/253
-      modules: ["node_modules", paths.appNodeModules].concat(
+      modules: ["node_modules", appDirectory, customModulesDirectory].concat(
         modules.additionalModulePaths || []
       ),
       // These are the reasonable defaults supported by the Node ecosystem.
@@ -284,16 +285,16 @@ module.exports = function(webpackEnv) {
       alias: {
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-        "react-native-linear-gradient": "dependencies/linearGradient",
-        "react-native-firebase": "dependencies/firebase",
-        "react-native-video": "dependencies/video",
-        "react-native-google-cast": "dependencies/CastButton",
-        "instabug-reactnative": "dependencies/instabug-reactnative",
-        "react-native-get-social": "dependencies/react-native-get-social",
-        "tipsi-stripe": "dependencies/tipsi-stripe",
-        "react-native-intercom": "dependencies/react-native-intercom",
-        "lottie-react-native": "dependencies/lottie-react-native",
-        "react-native-svg": "dependencies/react-native-svg",
+        "react-native-linear-gradient": path.resolve("dependencies/linearGradient"),
+        "react-native-firebase": path.resolve("dependencies/firebase"),
+        "react-native-video": path.resolve("dependencies/video"),
+        "react-native-google-cast": path.resolve("dependencies/CastButton"),
+        "instabug-reactnative": path.resolve("dependencies/instabug-reactnative"),
+        "react-native-get-social": path.resolve("dependencies/react-native-get-social"),
+        "tipsi-stripe": path.resolve("dependencies/tipsi-stripe"),
+        "react-native-intercom": path.resolve("dependencies/react-native-intercom"),
+        "lottie-react-native": path.resolve("dependencies/lottie-react-native"),
+        "react-native-svg": path.resolve("dependencies/react-native-svg"),
         "react-native/Libraries/StyleSheet/processColor":
           "react-native-web/dist/exports/processColor",
         "react-native/Libraries/ReactNative/AppRegistry":
@@ -309,13 +310,13 @@ module.exports = function(webpackEnv) {
       plugins: [
         // Adds support for installing with Plug'n'Play, leading to faster installs and adding
         // guards against forgotten dependencies and such.
-        PnpWebpackPlugin,
+        PnpWebpackPlugin
         // Prevents users from importing files from outside of src/ (or node_modules/).
         // This often causes confusion because we only process files within src/ with babel.
         // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
         // please link the files into your node_modules/ and let module-resolution kick in.
         // Make sure your source files are compiled, as they will not be processed in any way.
-        new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson])
+        // new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson])
       ]
     },
     resolveLoader: {
