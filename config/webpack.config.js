@@ -53,6 +53,8 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 const protocol = process.env.HTTPS === "true" ? "https" : "http";
+const appDirectory = path.resolve(__dirname, '../');
+const __DEV__ = process.env.NODE_ENV === 'development'
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -383,7 +385,12 @@ module.exports = function(webpackEnv) {
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
-              include: paths.appSrc,
+              // include: paths.appSrc,
+              include: [
+                path.resolve(appDirectory, "src"),
+                path.resolve(appDirectory, "node_modules/react-navigation"),
+                path.resolve(appDirectory, "node_modules/react-native-tab-view")
+              ],
               loader: require.resolve("babel-loader"),
               options: {
                 customize: require.resolve(
@@ -566,6 +573,10 @@ module.exports = function(webpackEnv) {
     },
     plugins: [
       // Generates an `index.html` file with the <script> injected.
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        __DEV__,
+      }),
       new HtmlWebpackPlugin(
         Object.assign(
           {},
