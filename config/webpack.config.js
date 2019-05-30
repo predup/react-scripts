@@ -287,6 +287,8 @@ module.exports = function(webpackEnv) {
         "react-native-video": "dependencies/video",
         "react-native-google-cast": "dependencies/CastButton",
         "instabug-reactnative": "dependencies/instabug-reactnative",
+        "react-native-get-social": "dependencies/react-native-get-social",
+        "tipsi-stripe": "dependencies/tipsi-stripe",
         "react-native-intercom": "dependencies/react-native-intercom",
         "lottie-react-native": "dependencies/lottie-react-native",
         "react-native-svg": "dependencies/react-native-svg",
