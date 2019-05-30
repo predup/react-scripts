@@ -119,7 +119,6 @@ checkBrowsers(paths.appPath, isInteractive)
       proxyConfig,
       urls.lanUrlForConfig
     );
-    console.log(serverConfig);
     const devServer = new WebpackDevServer(compiler, {
       ...serverConfig,
       https: true
