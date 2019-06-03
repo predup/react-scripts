@@ -9,6 +9,7 @@
 "use strict";
 
 const fs = require("fs");
+const dotenv = require('dotenv');
 const isWsl = require("is-wsl");
 const path = require("path");
 const webpack = require("webpack");
@@ -62,6 +63,24 @@ const __DEV__ = process.env.NODE_ENV === 'development'
 module.exports = function(webpackEnv) {
   const isEnvDevelopment = webpackEnv === "development";
   const isEnvProduction = webpackEnv === "production";
+  const rootPath =  path.resolve(__dirname, '../', '../', '../')
+  // Create the fallback path (the production .env)
+  const basePath = rootPath + '/.env';
+
+  // We're concatenating the environment name to our filename to specify the correct env file!
+  const envPath = basePath + '.local';
+
+  // Check if the file exists, otherwise fall back to the production .env
+  const finalPath = fs.existsSync(envPath) ? envPath : basePath;
+
+  // Set the path parameter in the dotenv config
+  const fileEnv = dotenv.config({ path: finalPath }).parsed;
+
+  // reduce it to a nice object, the same as before (but with the variables from the file)
+  const envKeys = Object.keys(fileEnv).reduce((prev, next) => {
+    prev[`process.env.${next}`] = JSON.stringify(fileEnv[next]);
+    return prev;
+  }, {});
 
   // Webpack uses `publicPath` to determine where the app is being served from.
   // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -285,6 +304,7 @@ module.exports = function(webpackEnv) {
       alias: {
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
+		"react-native-appsflyer": path.resolve("dependencies/appsflyer"),
         "react-native-linear-gradient": path.resolve("dependencies/linearGradient"),
         "react-native-firebase": path.resolve("dependencies/firebase"),
         "react-native-video": path.resolve("dependencies/video"),
@@ -575,7 +595,7 @@ module.exports = function(webpackEnv) {
     plugins: [
       // Generates an `index.html` file with the <script> injected.
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        ...envKeys,
         __DEV__,
       }),
       new HtmlWebpackPlugin(
